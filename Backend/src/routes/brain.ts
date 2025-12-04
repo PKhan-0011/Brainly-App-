@@ -19,3 +19,5 @@ brainRouter.get("/brain/share/:shareLink", (req, res) => {
   });
   // yha s id share karr sakte hai hmm okkh!..
 });
+
+// to ye jo hai wo like :shareLink isme mughe actually link milta hai from req.params.id
