@@ -20,14 +20,14 @@ const UserSchema: Schema<User> = new Schema({
 
 export const UserModel = mongoose.model<User>("UserSchema", UserSchema);
 
-export type Content = {
+export interface Content extends Document {
   title: string;
-  link: string;
+  link?: string;
   tags?: []; // yha bhi Tag[] aisa ayega okkh!>.
   userId?: User[];
-};
+}
 
-const ContentSchema = new Schema({
+const ContentSchema: Schema<Content> = new Schema({
   title: { type: String, required: true },
   link: { type: String, required: true },
   tags: [{ type: mongoose.Types.ObjectId, ref: "Tag", required: true }],

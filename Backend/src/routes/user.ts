@@ -93,20 +93,41 @@ userRouter.post("/signIn", async (req, res) => {
   }
 });
 
-userRouter.post("/content", middleware, (req, res) => {
-  const { title, type } = req.body;
+userRouter.post("/content", middleware, async (req, res) => {
+  const { title, link } = req.body;
+  const userId = req.id ?? " ";
 
   // sabse pehle y check kar lena like ki ye kahi exist to nahi karte na like in dataBase ookkh!.
-  ContentModel.create({
+  const userData = await ContentModel.create({
     title,
     link,
-    userId: req.userId,
-    tags: [],
+    // abhi do chhize isme deni hai yrr okkh!..
   });
 });
 
-userRouter.get("/content", (req, res) => {});
+userRouter.get("/content", middleware, async (req, res) => {
+  // yha p data Ayega llena hai jo dataBase m presnet hai okkh!>.
+  const UserId = req.id;
+  const title = req.body.title;
 
-userRouter.delete("/content", (req, res) => {});
+  const data = await ContentModel.find({
+    title,
+  });
+  res.json({
+    data,
+  });
+});
+
+userRouter.delete("/content", middleware, async (req, res) => {
+  const link = req.body.link;
+  const deleteData = await ContentModel.deleteMany({
+    link,
+  });
+  res.json({
+    deleteData,
+  });
+});
 
 // Yha p jo hamm id de rahe hai wo like id jo hogi wo uder._id se ayega when we check from the dataBNase okkH!.
+
+// abhi bhi kahi na kahii kuch gaati hai isko sahi s kario ek batr ookh!..
