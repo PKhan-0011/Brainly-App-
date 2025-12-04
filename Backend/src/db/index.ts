@@ -20,6 +20,25 @@ const UserSchema: Schema<User> = new Schema({
 
 export const UserModel = mongoose.model<User>("UserSchema", UserSchema);
 
+export type Content = {
+  title: string;
+  link: string;
+  tags?: []; // yha bhi Tag[] aisa ayega okkh!>.
+  userId?: User[];
+};
+
+const ContentSchema = new Schema({
+  title: { type: String, required: true },
+  link: { type: String, required: true },
+  tags: [{ type: mongoose.Types.ObjectId, ref: "Tag", required: true }],
+  userId: { type: mongoose.Types.ObjectId, ref: "User", required: true },
+});
+
+export const ContentModel = mongoose.model<Content>(
+  "ContentSchema",
+  ContentSchema
+);
+
 // dekh bhai tughe like kuch chizo ka dhyan rakhna hai jaise
 // create`isse dataBase m chize jayngi!..
 // find() isse array return hoga okkH! findOne() isse object return hoga okkh!.

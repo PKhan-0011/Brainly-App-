@@ -3,14 +3,17 @@
 import express from "express";
 import router from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
-import { UserModel } from "../db/index.js";
+import { ContentModel, UserModel } from "../db/index.js";
 import bcrypt from "bcrypt";
+import { dbConnect } from "../db/Connection.js";
+import { middleware } from "../middleware.js";
 
-const JWT_SECRET = "123";
+export const JWT_SECRET = "123";
 
 const app = express;
 
 export const userRouter = router();
+await dbConnect();
 
 userRouter.post("/signUp", async (req, res) => {
   const { userName, email, password } = req.body;
@@ -54,20 +57,53 @@ userRouter.post("/signUp", async (req, res) => {
 });
 
 userRouter.post("/signIn", async (req, res) => {
-  const { userName, email, password } = req.body;
+  const { email, password } = req.body;
 
   // abb yha s db mai check karo like ki ye data Present hai ya nahi okkh!..
   // agr nahi hoga to hamm error return kar denge okkh!.
   // but aagar data Mil gya hai to hamm actully token carete karenge okkh!..
 
-  const token = jwt.sign({ id: 1 }, JWT_SECRET);
+  try {
+    const existingUser = await UserModel.findOne({
+      email,
+      password,
+    });
 
-  res.json({
-    token,
-  });
+    // isse jo first wala email hoga jiisse match kaerga wo mil jayega isme okkh!. as a object,
+    // agar mai do chize isme deta to bhi yahi ata but zada filter hoke okkh!..
+
+    if (!existingUser) {
+      // iska mtlb ye hai ki ye exist karta hai in dataBase okkh!..
+      res.json({
+        message: "data are not present in dataBase okkh!..",
+      });
+    }
+
+    // agar dataBase m chize present hai to wha s token niklega okkh!..
+
+    const token = jwt.sign({ id: existingUser?._id }, JWT_SECRET);
+
+    res.json({
+      token,
+    });
+  } catch (e) {
+    const error = e as Error;
+    console.log(error);
+    res.json({ error });
+  }
 });
 
-userRouter.post("/content", (req, res) => {});
+userRouter.post("/content", middleware, (req, res) => {
+  const { title, type } = req.body;
+
+  // sabse pehle y check kar lena like ki ye kahi exist to nahi karte na like in dataBase ookkh!.
+  ContentModel.create({
+    title,
+    link,
+    userId: req.userId,
+    tags: [],
+  });
+});
 
 userRouter.get("/content", (req, res) => {});
 
