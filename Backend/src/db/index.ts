@@ -24,7 +24,7 @@ export interface Content extends Document {
   title: string;
   link?: string;
   tags?: []; // yha bhi Tag[] aisa ayega okkh!>.
-  userId?: User[];
+  userId?: string;
 }
 
 const ContentSchema: Schema<Content> = new Schema({
