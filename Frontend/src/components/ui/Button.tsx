@@ -7,18 +7,31 @@ export interface ButtonProps {
   size: "sm" | "md" | "lg";
   text: string | ReactElement;
   onClick?: () => void;
+  startIcon?: ReactElement;
 }
 
 const sizeStyle: Record<string, string> = {
-  lg: "px-8 py-4 bg-red-800 border rounded-2xl",
-  md: "px-4 py-2 bg-red-400 border rounded-2xl",
-  sm: "px-2 py-1 bg-red-200 border rounded-2xl",
+  lg: "px-8 py-4  border rounded-2xl",
+  md: "px-6 py-2 border rounded-2xl",
+  sm: "px-6 py-2  border rounded-2xl",
+};
+
+const variantStyle: Record<string, string> = {
+  Primary: "bg-red-600 text-white",
+  Secondary: "bg-purple-400 text-white",
 };
 
 export const Button = (props: ButtonProps) => {
   return (
     <div>
-      <button className={sizeStyle[props.size]}>{props.text}</button>
+      <button
+        className={`${sizeStyle[props.size]} ${variantStyle[props.variant!]}`}
+      >
+        <h1 className="flex items-center gap-2">
+          {" "}
+          {props.startIcon} {props.text}
+        </h1>
+      </button>
     </div>
   );
 };
