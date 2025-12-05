@@ -39,6 +39,13 @@ export const ContentModel = mongoose.model<Content>(
   ContentSchema
 );
 
+const LinkSchema: Schema = new Schema({
+  hash: { type: String, required: true },
+  userId: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
+});
+
+export const LinkModel = mongoose.model("LinkSchemaModel", LinkSchema);
+
 // dekh bhai tughe like kuch chizo ka dhyan rakhna hai jaise
 // create`isse dataBase m chize jayngi!..
 // find() isse array return hoga okkH! findOne() isse object return hoga okkh!.
@@ -57,3 +64,6 @@ export const ContentModel = mongoose.model<Content>(
 //deleteMany(filter):- isse match karke sara object delete kar dega p=okkh!.
 // delereOneAndupdate(fikter):-- pehle find karega and delete kar deg wo!
 //delteteByIdAndUpdate(filter):= ye pehhle id s find karega then delete kard dega okkh!..
+
+// ek populate ata hai like jisse hamm jo relationship jha hota hai uskoo populate kar deta hai okkh!.. like data aa jayega bass userId hi nahi hoga bass!..
+//
